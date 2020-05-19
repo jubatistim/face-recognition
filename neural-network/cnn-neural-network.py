@@ -70,27 +70,19 @@ cnn.summary()
 cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 ### Training the CNN on the Training set and evaluating it on the Test set
+# steps_per_epoch: ceil(num_samples / batch_size)
+# num samples training = 1873
+# num samples validation/test = 445
+# cnn.fit(training_set,
+#         steps_per_epoch = 50,
+#         epochs = 100,
+#         validation_data = test_set,
+#         validation_steps = 12)
+
 cnn.fit(training_set,
-        steps_per_epoch = 40,
-        epochs = 25,
-        validation_data = test_set,
-        validation_steps = 40)
-
-### Evaluate the CNN
-# scores = model.evaluate(X, Y, verbose=0)
-# print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
+        batch_size = 32,
+        epochs = 100,
+        validation_data = test_set)
 
 ### Save the model
 cnn.save(os.path.join('./saved-models', 'cnn' + str(calendar.timegm(time.gmtime())) + '.h5'))
-
-
-### Load the model back
-# from numpy import loadtxt
-# from keras.models import load_model
- 
-# # load model
-# model = load_model('model.h5')
-
-# # summarize model.
-# model.summary()

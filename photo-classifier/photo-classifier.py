@@ -12,7 +12,7 @@ SCALEX = 60
 MINSIZE = 64
  
 # load model
-model = tf.keras.models.load_model('../neural-network/saved-models/cnn1589763687.h5')
+model = tf.keras.models.load_model('../neural-network/saved-models/cnn1589854703.h5')
 
 # get running path
 base_dir = os.path.dirname(__file__)
