@@ -1,7 +1,4 @@
 import cv2
-import os
-import calendar
-import time
 import tensorflow as tf
 import numpy as np
 from keras.preprocessing import image as image_utils
@@ -14,34 +11,21 @@ MINSIZE = 64
 # load model
 model = tf.keras.models.load_model('../neural-network/saved-models/cnn1589763687.h5')
 
-# get running path
-base_dir = os.path.dirname(__file__)
-
-# Status counters
-total_files = 0
-current_file = 0
-
 # Face reconition classifier https://github.com/opencv/opencv/tree/master/data/haarcascades
 face_cascade = cv2.CascadeClassifier('../extractor/cascades/haarcascade_frontalface_default.xml')
 
-# Count total files for status
-for filename in os.listdir('images'):
-    total_files = total_files + 1
+# Define capture device
+video=cv2.VideoCapture(0)
 
-print('-----------------STARTED-----------------')
-
-# Main Loop
-for filename in os.listdir('images'):
-
-    # Update status
-    current_file = current_file + 1
-    print('Image ' + str(current_file) + ' of ' + str(total_files))
+while True:
+   
+    # Capture a frame
+    check, frame = video.read()
 
     # read current image file
-    img = cv2.imread(os.path.join(base_dir, 'images', filename))
+    img = frame.copy()
 
     # pre processing
-    img = cv2.resize(img, (int(img.shape[1]/2), int(img.shape[0]/2)))
     img_original = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.10, 8)
@@ -76,6 +60,17 @@ for filename in os.listdir('images'):
             except:
                 print('Error')
 
-    cv2.imwrite(os.path.join(base_dir, 'images_conv', str(calendar.timegm(time.gmtime())) + '.jpg'), img)
+    # Show realtime captures
+    cv2.imshow("Color Frame",frame)
+    cv2.imshow("Recognized Realtime",img)
 
-print('-----------------FINISHED-----------------')
+    # Key to end capture session
+    key=cv2.waitKey(1)
+
+    # Finish capture session
+    if key==ord('q'):
+        break
+
+# release videos and windows
+video.release()
+cv2.destroyAllWindows
