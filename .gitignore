@@ -1,6 +1,10 @@
-images
+ext-images
 
-images_conv
+ext-images-conv
+
+photo-class-images
+
+photo-class-images-conv
 
 cascades
 
@@ -9,3 +13,5 @@ CNN
 saved-models
 
 .vscode
+
+__pycache__
