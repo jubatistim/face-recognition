@@ -35,17 +35,12 @@ def predict():
     message = request.get_json(force = True)
     encoded = message['image']
 
-    # string base 64 encoded to cv2 image - THIS CHANGES COLOR OF THE IMAGE AND THE RECOGNITION LOOKS BETTER - I DON'T KNOW WHY IT CHANGES IMAGE COLOR
-    decoded = base64.b64decode(encoded)
-    image = Image.open(io.BytesIO(decoded))
-    img_source = np.array(image)
-
     # string base 64 encoded to cv2 image - THIS DON'T CHANGE THE IMAGE COLORS, SO FOR NOW I WILL USE THAT TO USE AS BACKGROUND TO DRAW RECOGNITION, BUT NOT WILL BE INPUTED TO THE CNN
     im_bytes_return = base64.b64decode(encoded)
     im_arr_return = np.frombuffer(im_bytes_return, dtype=np.uint8)
     img_return = cv2.imdecode(im_arr_return, flags=cv2.IMREAD_COLOR)
 
-    img = predict_Luna_Ju(img_source, img_return, model)
+    img = predict_Luna_Ju(img_return, model)
 
     _, im_arr = cv2.imencode('.jpg', img)
     im_bytes = im_arr.tobytes()

@@ -34,6 +34,7 @@ img = cv2.imdecode(im_arr, flags=cv2.COLOR_RGB2GRAY)
 # COLOR_RGB2BGR
 # IMREAD_COLOR
 # COLOR_RGB2GRAY
+# IMREAD_UNCHANGED
 
 # img = cv2.resize(img, (int(img.shape[1]/7), int(img.shape[0]/7)))
 

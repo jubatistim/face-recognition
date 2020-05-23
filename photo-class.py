@@ -39,16 +39,7 @@ for filename in os.listdir('photo-class-images'):
     # read current image file
     img_return = cv2.imread(currentPath)
 
-    #cv2 image to string base 64 encoded
-    _, buffer = cv2.imencode('.jpg', img_return)
-    image_read = base64.b64encode(buffer)
-
-    # string base 64 encoded to cv2 image - THIS CHANGES COLOR OF THE IMAGE AND THE RECOGNITION LOOKS BETTER - I DON'T KNOW WHY IT CHANGES IMAGE COLOR
-    decoded = base64.b64decode(image_read)
-    nimage = Image.open(io.BytesIO(decoded))
-    img_source = np.array(nimage)
-
-    img_predicted = predict_Luna_Ju(img_source, img_return, model, 1000, 64, 50)
+    img_predicted = predict_Luna_Ju(img_return, model, 1000, 64, 50)
 
     cv2.imwrite(os.path.join('photo-class-images-conv', str(calendar.timegm(time.gmtime())) + '.jpg'), img_predicted)
 

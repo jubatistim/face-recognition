@@ -4,29 +4,52 @@ import calendar
 import time
 import tensorflow as tf
 import numpy as np
+import base64
+from PIL import Image
+import io
 from keras.preprocessing import image as image_utils
 
 # Face reconition classifier https://github.com/opencv/opencv/tree/master/data/haarcascades
 face_cascade = cv2.CascadeClassifier('./cascades/haarcascade_frontalface_default.xml')
 
-def predict_Luna_Ju(img_source, img_return, model, max_height = 700, min_size = 32, face_padding = 30):
+def predict_Luna_Ju(img_return, model, max_wh = 700, min_size = 32, face_padding = 30):
+
+    #cv2 image to string base 64 encoded
+    _, buffer = cv2.imencode('.jpg', img_return)
+    image_read = base64.b64encode(buffer)
+
+    # string base 64 encoded to cv2 image - THIS CHANGES COLOR OF THE IMAGE AND THE RECOGNITION LOOKS BETTER - I DON'T KNOW WHY IT CHANGES IMAGE COLOR
+    decoded = base64.b64decode(image_read)
+    nimage = Image.open(io.BytesIO(decoded))
+    img_source = np.array(nimage)
 
     # pre processing
     imgSource = img_source.copy()
     imgReturn = img_return.copy()
 
-    if imgReturn.shape[1] != imgSource.shape[1]:
+    if imgReturn.shape[1] != imgSource.shape[1] or imgReturn.shape[0] != imgSource.shape[0]:
         raise Exception("The shapes of img_source and img_return should be the same.")
 
-    if imgReturn.shape[1] > max_height:
-        new_heigth = max_height
-        new_width = max_height * imgReturn.shape[0] / imgReturn.shape[1]
+    if imgReturn.shape[1] > imgReturn.shape[0]:
+        if imgReturn.shape[1] > max_wh:
+            n_width = max_wh
+            n_height = max_wh * imgReturn.shape[0] / imgReturn.shape[1]
 
-        imgReturn = cv2.resize(imgReturn, (int(new_heigth), int(new_width)), interpolation = cv2.INTER_AREA)
-        imgSource = cv2.resize(imgSource, (int(new_heigth), int(new_width)), interpolation = cv2.INTER_AREA)
+            imgReturn = cv2.resize(imgReturn, (int(n_width), int(n_height)), interpolation = cv2.INTER_AREA)
+            imgSource = cv2.resize(imgSource, (int(n_width), int(n_height)), interpolation = cv2.INTER_AREA)
+        else:
+            min_size = 32
+            face_padding = 30
     else:
-        min_size = 32
-        face_padding = 30
+        if imgReturn.shape[0] > max_wh:
+            n_height = max_wh
+            n_width = max_wh * imgReturn.shape[1] / imgReturn.shape[0]
+
+            imgReturn = cv2.resize(imgReturn, (int(n_width), int(n_height)), interpolation = cv2.INTER_AREA)
+            imgSource = cv2.resize(imgSource, (int(n_width), int(n_height)), interpolation = cv2.INTER_AREA)
+        else:
+            min_size = 32
+            face_padding = 30    
     
     gray = cv2.cvtColor(imgSource, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.10, 8)
