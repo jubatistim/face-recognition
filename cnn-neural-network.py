@@ -2,11 +2,11 @@
 
 ### Importing the libraries
 
-import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import calendar
 import time
 import os
+import keras
 
 ###############################
 ## Part 1 - Data Preprocessing
@@ -38,26 +38,26 @@ test_set = test_datagen.flow_from_directory('CNN/test',
 ###############################
 
 ### Initialising the CNN
-cnn = tf.keras.models.Sequential()
+cnn = keras.models.Sequential()
 
 ### Step 1 - Convolution
-cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, padding="same", activation="relu", input_shape=[64, 64, 3]))
+cnn.add(keras.layers.Conv2D(filters=32, kernel_size=3, padding="same", activation="relu", input_shape=[64, 64, 3]))
 
 ### Step 2 - Pooling
-cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2, padding='valid'))
+cnn.add(keras.layers.MaxPool2D(pool_size=2, strides=2, padding='valid'))
 
 ### Adding a second convolutional layer
-cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, padding="same", activation="relu"))
-cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2, padding='valid'))
+cnn.add(keras.layers.Conv2D(filters=32, kernel_size=3, padding="same", activation="relu"))
+cnn.add(keras.layers.MaxPool2D(pool_size=2, strides=2, padding='valid'))
 
 ### Step 3 - Flattening
-cnn.add(tf.keras.layers.Flatten())
+cnn.add(keras.layers.Flatten())
 
 ### Step 4 - Full Connection
-cnn.add(tf.keras.layers.Dense(units=128, activation='relu'))
+cnn.add(keras.layers.Dense(units=128, activation='relu'))
 
 ### Step 5 - Output Layer
-cnn.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+cnn.add(keras.layers.Dense(units=1, activation='sigmoid'))
 
 ### Summarize the network
 cnn.summary()
@@ -80,7 +80,6 @@ cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accura
 #         validation_steps = 12)
 
 cnn.fit(training_set,
-        batch_size = 32,
         epochs = 100,
         validation_data = test_set)
 

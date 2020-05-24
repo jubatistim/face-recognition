@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from io import StringIO
 
-image = open("./photo-class-images/a (9).jpg", 'rb') #open binary file in read mode 
+image = open("./photo-class-images/aaa (1).jpg", 'rb') #open binary file in read mode 
 # <class '_io.BufferedReader'>
 image_read = image.read()
 # <class 'bytes'>
@@ -18,7 +18,7 @@ data = {
 
 json_data = json.dumps(data)
 
-response = requests.post('http://127.0.0.1:5000/predict', json_data)
+response = requests.post('http://jubatistim.pythonanywhere.com/predict', json_data)
 
 image_predicted = response.json()['image_predicted']
 
