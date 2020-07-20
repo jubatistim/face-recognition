@@ -15,3 +15,5 @@ saved-models
 .vscode
 
 __pycache__
+
+venv37

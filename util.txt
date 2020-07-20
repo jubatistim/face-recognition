@@ -1,0 +1,22 @@
+virtualenv venv37 -p "C:\Users\Juliano Batistim\AppData\Local\Programs\Python\Python37\python.exe"
+OR
+py -3 -m venv env
+env\scripts\activate
+pip install -r requirements.txt
+Set-Item Env:FLASK_APP ".\application.py"
+flask run
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+venv37/Scripts/Activate.ps1
+clear
+
+D:\_PRODUCTION\DEV.WORK\face-recognition-web-4\venv37\Scripts\python.exe -m pip install --upgrade pip
+
+pip install -r requirements.txt
+
+
+$env:FLASK_APP = "app.py"
+flask run
+
+
+PRD: python -m flask run

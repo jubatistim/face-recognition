@@ -57,7 +57,8 @@ cnn.add(keras.layers.Flatten())
 cnn.add(keras.layers.Dense(units=128, activation='relu'))
 
 ### Step 5 - Output Layer
-cnn.add(keras.layers.Dense(units=1, activation='sigmoid'))
+cnn.add(keras.layers.Dense(units=1, activation='sigmoid')) # DEFAULT
+# cnn.add(keras.layers.Dense(units=2, activation='softmax')) # TRYING TO FIND %, outputs between 0 and 1
 
 ### Summarize the network
 cnn.summary()
@@ -67,7 +68,22 @@ cnn.summary()
 ###############################
 
 ### Compiling the CNN
-cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy']) # DEFAULT
+
+# SIGMOID ACTIVIATION
+# cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy']) # Seems the best one, but always output 0 or 1
+# cnn.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy']) # DON'T WORK
+# cnn.compile(optimizer = 'adam', loss = 'poisson', metrics = ['accuracy']) # Seems work, but always output 0 or 1
+# cnn.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy']) # Seems work, but always output 0 or 1
+
+# SOFTMAX ACTIVATION
+# cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy']) # strange results with same loss value during several epochs. THE MODEL FOR PREDICTIONS WITH 10 EPOCHS IS VERY BAD
+# cnn.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy']) # accuracy and loss seems good during the trainning, but it seems to always output 0 or 1. ACTUALLY THIS IS THE GOOD MODEL FOR PREDICTIONS.
+# cnn.compile(optimizer = 'adam', loss = 'poisson', metrics = ['accuracy']) # strange results with same loss value during several epochs. THE MODEL FOR PREDICTIONS WITH 10 EPOCHS IS VERY BAD
+# cnn.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy']) # strange results with same loss value during several epochs. THE MODEL FOR PREDICTIONS WITH 10 EPOCHS IS VERY BAD
+
+
+
 
 ### Training the CNN on the Training set and evaluating it on the Test set
 # steps_per_epoch: ceil(num_samples / batch_size)
@@ -80,7 +96,7 @@ cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accura
 #         validation_steps = 12)
 
 cnn.fit(training_set,
-        epochs = 100,
+        epochs = 10,
         validation_data = test_set)
 
 ### Save the model
